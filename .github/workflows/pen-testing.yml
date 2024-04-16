@@ -1,0 +1,26 @@
+name: Penetration testing
+on: 
+  # schedule:
+  #   - cron: '0 0 1 * *'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'URL target of the pen testing'
+        required: true
+        default: 'https://app.amplication-sandbox.com'
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: Scan the webapplication
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.10.0
+        with:
+          target: ${{ github.event.inputs.target }}
+          cmd_options: '-m 30'
+        env:
+          ZAP_AUTH_HEADER_VALUE: ${{ secrets.AMPLICATION_BOT_TOKEN }}
+          ZAP_AUTH_HEADER_SITE: ".amplication.com"
