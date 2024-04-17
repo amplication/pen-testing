@@ -21,10 +21,11 @@ jobs:
         with:
           target: '${{ github.event.inputs.target }}/graphql'
           format: graphql
-          cmd_options: '-m 30 -a'
+          cmd_options: '-T 30 -n amplication.context'
+          rules_file_name: 'amplication.conf'
         env:
           ZAP_AUTH_HEADER_VALUE: ${{ secrets.AMPLICATION_BOT_TOKEN }}
-          ZAP_AUTH_HEADER_SITE: ".amplication.com"
+          ZAP_AUTH_HEADER_SITE: ${{ github.event.inputs.target }}
 
   zap_scan_rest:
     runs-on: ubuntu-latest
@@ -37,7 +38,8 @@ jobs:
         with:
           target: '${{ github.event.inputs.target }}/api-json'
           format: openapi
-          cmd_options: '-m 30 -a'
+          cmd_options: '-T 30 -n amplication.context'
+          rules_file_name: 'amplication.conf'
         env:
           ZAP_AUTH_HEADER_VALUE: ${{ secrets.AMPLICATION_BOT_TOKEN }}
-          ZAP_AUTH_HEADER_SITE: ".amplication.com"
+          ZAP_AUTH_HEADER_SITE: ${{ github.event.inputs.target }}
